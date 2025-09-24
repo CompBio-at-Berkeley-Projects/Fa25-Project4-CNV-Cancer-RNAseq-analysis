@@ -6,8 +6,7 @@ Build a lightweight, reproducible pipeline + dashboard (using tools like inferCN
   - **Melanoma**: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE72056
 - **Tools**
   - Python: scanpy (QC/CL), anndata, scrublet (doublets), bbknn/harmony (batch), plotting (matplotlib).
-  - CNV callers: inferCNV (R), CopyKAT (R), optional: HoneyBADGER, CONICSmat (R).
-  - (Start with CopyKAT for auto tumor/normal calls; inferCNV for detailed chromosome heatmaps.)
+  - CNV callers: inferCNV (R), CopyKAT (R), optional: HoneyBADGER, CONICSmat (R). (Start with CopyKAT for auto tumor/normal calls; inferCNV for detailed chromosome heatmaps.)
   - Optional validation: bulk WES/WGS CNV if available; or author labels where provided.-
   -Dashboard: lightweight Streamlit (Python) or Quarto/R Shiny.
 - **R Resources**
