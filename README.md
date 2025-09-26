@@ -27,3 +27,8 @@ cnv-scRNA/
   results/ figures/
   app/   (streamlit or shiny)
 ```
+
+# File Structure
+The raw files are contained `data/raw`, where it issaved as a raw compressed file (`data/raw/melanoma_compressed` or `data/raw/glioblastomas_compressed`). 
+
+The files that end in `.soft`/`.xml` contain metadata which I believe are not useful to our project. The main target files are the `.txt` files (such as `..._series_matrix.txt`) which contain the complete processed expression matrix or expression matrix with samples as columns, genes as rows. 
