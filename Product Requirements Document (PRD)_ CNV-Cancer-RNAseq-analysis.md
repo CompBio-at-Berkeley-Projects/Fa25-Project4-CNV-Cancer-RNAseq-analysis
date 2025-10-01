@@ -1,6 +1,5 @@
 # Product Requirements Document (PRD): CNV-Cancer-RNAseq-analysis
 
-**Author**: Manus AI
 **Date**: October 1, 2025
 **Version**: 1.0 (MVP)
 
@@ -86,8 +85,6 @@ The system will use a hybrid architecture that leverages the strengths of both P
 3.  **CNV Analysis (R)**: The Python backend uses the `subprocess` module to call a dedicated R script, passing the path to the preprocessed data. The R script runs `CopyKAT` and saves the output (plots and tables) to a results directory.
 4.  **Visualization (Python)**: Once the R script is complete, the Streamlit frontend reads the output files from the results directory and displays them in the UI.
 5.  **Download**: The user can download the output files directly from the Streamlit UI.
-
-![Architecture Diagram](https://i.imgur.com/8p3j2gQ.png)
 
 ## 6. Validation & Quality Metrics
 
