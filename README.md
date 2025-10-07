@@ -39,8 +39,15 @@ cnv-scRNA/
 
 ### For Mac/Linux Users
 
-#### Step 1: Open Terminal
-- Press `Command + Space`, type "Terminal", and press Enter
+#### Step 1: Install Conda
+```
+# For Apple Silicon (arm64)
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+
+# For Intel Macs (x86_64)
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh`
+```
+
 
 #### Step 2: Create conda environment with R
 Copy and paste this entire command:
