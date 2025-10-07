@@ -2,6 +2,7 @@
 
 **Date**: October 1, 2025
 **Version**: 1.0 (MVP)
+**Author**: Hanson Wen (Only Hanson should edit this document)
 
 ## 1. Introduction
 
