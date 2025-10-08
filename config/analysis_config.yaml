@@ -1,0 +1,207 @@
+# CopyKAT Automated Analysis Configuration
+# Edit this file to customize analysis parameters
+
+# =============================================================================
+# Input/Output Settings
+# =============================================================================
+input:
+  # Path to expression matrix file (genes x cells)
+  # Supported formats: .txt, .txt.gz, .csv, .tsv, .rds
+  file: "data/raw/glioblastomas_compressed/GSE57872_GBM_data_matrix.txt.gz"
+
+  # File separator (tab, comma, or space)
+  separator: "tab"
+
+  # Does file have header row?
+  header: true
+
+  # Does file have row names (gene names)?
+  row_names: true
+
+output:
+  # Base output directory
+  directory: "results"
+
+  # Sample name (subdirectory will be created)
+  sample_name: "automated_analysis"
+
+  # Add timestamp to output directory? (recommended for batch processing)
+  timestamp: true
+
+  # Save intermediate results for debugging?
+  save_intermediate: true
+
+# =============================================================================
+# Quality Control Settings
+# =============================================================================
+quality_control:
+  # Cell filtering thresholds
+  min_genes_per_cell: 200
+  min_umi_per_cell: 500
+  max_mt_percent: 20
+
+  # Gene filtering
+  min_cells_per_gene: 3
+
+  # Apply automatic filtering?
+  auto_filter: true
+
+  # Plot QC metrics?
+  plot_qc: true
+
+# =============================================================================
+# Data Preprocessing
+# =============================================================================
+preprocessing:
+  # Automatically detect log-transformed data?
+  detect_log_transform: true
+
+  # If log-transformed, convert to counts?
+  convert_to_counts: true
+
+  # Log base (2, e, or 10)
+  log_base: 2
+
+# =============================================================================
+# CopyKAT Parameters
+# =============================================================================
+copykat:
+  # Gene ID type: "S" (Symbol) or "E" (Ensembl)
+  id_type: "S"
+
+  # Cell line sample? "yes" or "no"
+  # Set to "yes" for pure cancer cell lines (no normal cells)
+  cell_line: "no"
+
+  # Minimum genes per chromosome for cell filtering
+  ngene_chr: 5
+
+  # Lower detection rate threshold
+  # Genes expressed in fewer than LOW.DR fraction of cells are filtered
+  LOW_DR: 0.05
+
+  # Upper detection rate threshold
+  # Only genes with detection rate between LOW.DR and UP.DR used for segmentation
+  UP_DR: 0.1
+
+  # Smoothing window size (number of genes)
+  # Smaller = higher resolution, more noise
+  # Larger = smoother, lower resolution
+  win_size: 25
+
+  # KS test p-value cutoff for segmentation
+  # Lower = more breakpoints (higher resolution)
+  # Higher = fewer breakpoints (smoother)
+  KS_cut: 0.1
+
+  # Distance metric: "euclidean", "pearson", or "spearman"
+  distance: "euclidean"
+
+  # Genome build: "hg20", "hg19", "mm10", "mm9"
+  genome: "hg20"
+
+  # Number of CPU cores to use
+  # Set to 0 to use all available cores
+  n_cores: 4
+
+  # Known normal cell names (optional)
+  # Path to text file with one cell name per line
+  # Leave empty to auto-detect
+  norm_cell_names: ""
+
+  # Plot genes in heatmap? ("TRUE" or "FALSE" as string)
+  plot_genes: "TRUE"
+
+  # Output to current directory or custom path?
+  output_dir: ""
+
+# =============================================================================
+# Advanced Analysis Options
+# =============================================================================
+advanced:
+  # Generate additional visualizations?
+  extra_plots: true
+
+  # Create chromosome-level summary?
+  chr_summary: true
+
+  # Export results to CSV?
+  export_csv: true
+
+  # Generate HTML report?
+  generate_report: true
+
+  # Report template (relative to project root)
+  report_template: "r_scripts/copykat_report.Rmd"
+
+# =============================================================================
+# Logging and Error Handling
+# =============================================================================
+logging:
+  # Enable detailed logging?
+  verbose: true
+
+  # Log level: "INFO", "DEBUG", "WARN", "ERROR"
+  level: "INFO"
+
+  # Save log to file?
+  save_log: true
+
+  # Continue on errors? (for batch processing)
+  continue_on_error: false
+
+# =============================================================================
+# Performance Settings
+# =============================================================================
+performance:
+  # Maximum memory (GB) - not enforced, just for reference
+  max_memory_gb: 32
+
+  # Timeout (minutes) - abort analysis if exceeds this
+  timeout_minutes: 240
+
+# =============================================================================
+# Visualization Settings
+# =============================================================================
+visualization:
+  # Plot width (inches)
+  width: 12
+
+  # Plot height (inches)
+  height: 8
+
+  # DPI for raster plots
+  dpi: 300
+
+  # Color scheme for heatmap: "default", "viridis", "RdBu"
+  color_scheme: "default"
+
+# =============================================================================
+# Scenario Presets (uncomment to use)
+# =============================================================================
+# Preset configurations for common scenarios
+
+# High Resolution Analysis:
+# copykat:
+#   win_size: 15
+#   KS_cut: 0.05
+#   n_cores: 8
+
+# Low Quality Data:
+# copykat:
+#   LOW_DR: 0.02
+#   UP_DR: 0.02
+#   win_size: 50
+
+# Cell Line (Pure Cancer):
+# copykat:
+#   cell_line: "yes"
+#   LOW_DR: 0.02
+#   UP_DR: 0.05
+
+# Large Dataset (>5000 cells):
+# copykat:
+#   n_cores: 16
+#   plot_genes: "FALSE"
+# performance:
+#   max_memory_gb: 64
