@@ -1,0 +1,24 @@
+# Frontend Dependencies for Streamlit Dashboard
+# Install with: pip install -r requirements.txt
+
+# Core framework
+streamlit>=1.28.0
+
+# Data manipulation
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.17.0
+
+# File handling
+openpyxl>=3.1.0  # For Excel files if needed
+
+# Configuration
+pyyaml>=6.0
+
+# Utilities
+python-dateutil>=2.8.0
+

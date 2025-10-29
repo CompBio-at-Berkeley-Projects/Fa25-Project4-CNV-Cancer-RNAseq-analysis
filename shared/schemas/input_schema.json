@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CopyKAT Analysis Input Schema",
+  "description": "Schema for analysis request parameters from frontend to backend",
+  "type": "object",
+  "required": ["input_file", "sample_name", "output_dir", "genome"],
+  "properties": {
+    "input_file": {
+      "type": "string",
+      "description": "Path to expression matrix file",
+      "examples": ["backend/data/raw/sample.txt.gz"]
+    },
+    "sample_name": {
+      "type": "string",
+      "description": "Unique sample identifier",
+      "pattern": "^[a-zA-Z0-9_]+$",
+      "minLength": 1,
+      "maxLength": 50,
+      "examples": ["sample_001", "glio_test"]
+    },
+    "output_dir": {
+      "type": "string",
+      "description": "Base output directory path",
+      "examples": ["backend/results"]
+    },
+    "genome": {
+      "type": "string",
+      "description": "Reference genome version",
+      "enum": ["hg20", "mm10"],
+      "examples": ["hg20"]
+    },
+    "ngene_chr": {
+      "type": "integer",
+      "description": "Minimum genes per chromosome",
+      "minimum": 1,
+      "maximum": 20,
+      "default": 5
+    },
+    "LOW_DR": {
+      "type": "number",
+      "description": "Detection rate for smoothing (fraction of cells)",
+      "minimum": 0.01,
+      "maximum": 0.50,
+      "default": 0.05
+    },
+    "UP_DR": {
+      "type": "number",
+      "description": "Detection rate for segmentation (must be >= LOW_DR)",
+      "minimum": 0.01,
+      "maximum": 0.50,
+      "default": 0.10
+    },
+    "win_size": {
+      "type": "integer",
+      "description": "Window size in number of genes",
+      "minimum": 10,
+      "maximum": 150,
+      "default": 25
+    },
+    "KS_cut": {
+      "type": "number",
+      "description": "Kolmogorov-Smirnov test cutoff for segmentation",
+      "minimum": 0.05,
+      "maximum": 0.40,
+      "default": 0.10
+    },
+    "distance": {
+      "type": "string",
+      "description": "Distance metric for cell clustering",
+      "enum": ["euclidean", "pearson", "spearman"],
+      "default": "euclidean"
+    },
+    "n_cores": {
+      "type": "integer",
+      "description": "Number of CPU cores to use",
+      "minimum": 1,
+      "maximum": 64,
+      "default": 4
+    },
+    "cell_line": {
+      "type": "string",
+      "description": "Is sample a pure cell line?",
+      "enum": ["yes", "no"],
+      "default": "no"
+    },
+    "plot_genes": {
+      "type": "boolean",
+      "description": "Show gene names in heatmap",
+      "default": true
+    },
+    "norm_cell_names": {
+      "type": "array",
+      "description": "Optional list of known normal cell names",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "additionalProperties": false
+}
+

@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CopyKAT Analysis Output Schema",
+  "description": "Schema for analysis results returned from backend to frontend",
+  "type": "object",
+  "required": ["success", "timestamp"],
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "Whether analysis completed successfully"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of completion"
+    },
+    "output_dir": {
+      "type": ["string", "null"],
+      "description": "Path to results directory"
+    },
+    "sample_name": {
+      "type": ["string", "null"],
+      "description": "Sample identifier used in analysis"
+    },
+    "files": {
+      "type": "object",
+      "description": "Paths to output files",
+      "properties": {
+        "predictions": {
+          "type": "string",
+          "description": "Path to cell classifications file"
+        },
+        "cna_results": {
+          "type": "string",
+          "description": "Path to CNV segments file"
+        },
+        "cna_raw": {
+          "type": "string",
+          "description": "Path to gene-level CNV matrix"
+        },
+        "heatmap": {
+          "type": "string",
+          "description": "Path to CNV heatmap image (JPEG)"
+        },
+        "heatmap_genes": {
+          "type": "string",
+          "description": "Path to heatmap with gene names (PDF)"
+        },
+        "clustering": {
+          "type": "string",
+          "description": "Path to clustering results (RDS)"
+        },
+        "report": {
+          "type": "string",
+          "description": "Path to HTML report"
+        },
+        "log": {
+          "type": "string",
+          "description": "Path to analysis log file"
+        }
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "object",
+      "description": "Summary statistics",
+      "properties": {
+        "n_cells": {
+          "type": "integer",
+          "description": "Total number of cells analyzed",
+          "minimum": 0
+        },
+        "n_aneuploid": {
+          "type": "integer",
+          "description": "Number of aneuploid cells",
+          "minimum": 0
+        },
+        "n_diploid": {
+          "type": "integer",
+          "description": "Number of diploid cells",
+          "minimum": 0
+        },
+        "n_not_defined": {
+          "type": "integer",
+          "description": "Number of undefined cells",
+          "minimum": 0
+        },
+        "aneuploid_fraction": {
+          "type": "number",
+          "description": "Fraction of aneuploid cells (0-1)",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "mean_confidence": {
+          "type": "number",
+          "description": "Mean classification confidence",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["n_cells"]
+    },
+    "runtime_minutes": {
+      "type": "number",
+      "description": "Analysis runtime in minutes",
+      "minimum": 0
+    },
+    "error": {
+      "type": ["string", "null"],
+      "description": "Error message if analysis failed"
+    },
+    "warnings": {
+      "type": "array",
+      "description": "List of warning messages",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "additionalProperties": false
+}
+
