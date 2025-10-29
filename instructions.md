@@ -205,10 +205,10 @@ All team members should have:
 5. Commit and push your work
 6. Create Pull Request when feature is complete
 
-### Communication Workflow
+### Communication Workflow (lets start getting used to this! )
 
 - Daily standups: Share progress, blockers, plans
-- Use GitHub Issues for bug reports and feature requests
+- Use GitHub Issues for bug reports and feature requests 
 - Use Pull Request comments for code discussions
 - Tag team members when you need their input
 
