@@ -14,17 +14,26 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-# TODO: Import backend API when implemented
-# from backend.api.r_executor import run_copykat_analysis
+# Import backend API
+from backend.api.r_executor import run_copykat_analysis
+from backend.api.result_parser import parse_copykat_results
 
 st.title("⚙️ Configure Analysis")
 
-# Check if file is uploaded
-if not st.session_state.get('uploaded_file'):
-    st.warning("⚠️ Please upload a file first on the **Upload** page")
+# Check if file is uploaded or example dataset is selected
+has_uploaded_file = st.session_state.get('uploaded_file') is not None
+has_example_dataset = st.session_state.get('example_file_path') is not None
+
+if not has_uploaded_file and not has_example_dataset:
+    st.warning("⚠️ Please upload a file or select an example dataset on the **Upload** page")
     st.stop()
 
-st.success("✅ File uploaded and ready for analysis")
+# Show which data source is being used
+if has_example_dataset:
+    st.success(f"✅ Example dataset selected: **{st.session_state.get('example_dataset', 'Unknown').capitalize()}**")
+    st.info(f"📁 File: `{st.session_state.get('example_file_path')}`")
+elif has_uploaded_file:
+    st.success(f"✅ File uploaded: **{st.session_state.uploaded_file.name}**")
 
 st.markdown("""
 Configure the CopyKAT analysis parameters below. Default values work well for most datasets.
@@ -170,36 +179,63 @@ with st.form("analysis_parameters"):
             'plot_genes': plot_genes
         }
         
+        # Determine input file path
+        if st.session_state.get('example_file_path'):
+            input_file = st.session_state.example_file_path
+        elif st.session_state.get('uploaded_file'):
+            # Save uploaded file to temp location
+            temp_dir = project_root / "backend" / "data" / "uploaded"
+            temp_dir.mkdir(parents=True, exist_ok=True)
+            input_file = str(temp_dir / st.session_state.uploaded_file.name)
+            with open(input_file, 'wb') as f:
+                f.write(st.session_state.uploaded_file.getbuffer())
+        else:
+            st.error("No input file available")
+            st.stop()
+
         # Run analysis
         st.session_state.analysis_running = True
-        
+
         with st.spinner("Running CopyKAT analysis... This may take 5-15 minutes."):
-            # Progress tracking
-            progress_bar = st.progress(0)
-            status_text = st.empty()
-            
-            status_text.text("Step 1/5: Preparing data...")
-            progress_bar.progress(0.1)
-            
-            # TODO: Implement backend call when API is ready
-            # try:
-            #     result = run_copykat_analysis(st.session_state.analysis_params)
-            #     
-            #     if result['success']:
-            #         st.session_state.results = result
-            #         st.success("✅ Analysis complete!")
-            #         st.info("👉 Go to the **Results** page to view outputs")
-            #     else:
-            #         st.error(f"Analysis failed: {result['error']}")
-            # except Exception as e:
-            #     st.error(f"Error running analysis: {str(e)}")
-            
-            # Placeholder for now
-            status_text.text("Step 5/5: Complete!")
-            progress_bar.progress(1.0)
-            st.warning("⚠️ Backend integration pending. This is a placeholder.")
-            st.info("When implemented, results will appear in the Results page.")
-        
+            try:
+                # Prepare parameters for R executor
+                params = {
+                    'input_file': input_file,
+                    'sample_name': sample_name,
+                    'output_dir': str(project_root / "backend" / "results"),
+                    'genome': genome,
+                    'n_cores': n_cores,
+                    'ngene_chr': ngene_chr,
+                    'win_size': win_size,
+                    'KS_cut': ks_cut,
+                    'LOW_DR': low_dr,
+                    'UP_DR': up_dr,
+                    'distance': distance,
+                    'cell_line': cell_line
+                }
+
+                # Run CopyKAT
+                result = run_copykat_analysis(params)
+
+                if result['success']:
+                    # Parse results
+                    parsed_results = parse_copykat_results(result['output_dir'])
+                    st.session_state.results = parsed_results
+                    st.session_state.results['runtime'] = result.get('runtime_minutes', 0)
+                    st.session_state.results['output_dir'] = result['output_dir']
+
+                    st.success(f"✅ Analysis complete! Runtime: {result.get('runtime_minutes', 0):.1f} minutes")
+                    st.info("👉 Go to the **Results** page to view outputs")
+                else:
+                    st.error(f"❌ Analysis failed: {result.get('error', 'Unknown error')}")
+                    with st.expander("Error details"):
+                        st.code(result.get('stderr', 'No error details available'))
+            except Exception as e:
+                st.error(f"Error running analysis: {str(e)}")
+                import traceback
+                with st.expander("Full error traceback"):
+                    st.code(traceback.format_exc())
+
         st.session_state.analysis_running = False
 
 # Parameter reference
