@@ -60,6 +60,14 @@ st.markdown("""
         border-left: 4px solid #1f77b4;
         margin: 1rem 0;
     }
+    .info-box h3 {
+        color: #1f77b4;
+        margin-top: 0;
+    }
+    .info-box p {
+        color: #333;
+        margin-bottom: 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
