@@ -138,20 +138,20 @@ else:
             st.info("Loading example dataset...")
             # Load glioblastoma data
             # st.session_state.uploaded_file = ...
-            st.experimental_rerun()
-    
+            st.rerun()
+
     with col2:
         st.markdown("**Melanoma Dataset**")
         st.write("- Source: GSE72056")
         st.write("- Cells: ~4,000")
         st.write("- Genes: ~23,000")
-        
+
         # TODO: Implement load example dataset
         if st.button("Load Melanoma Example"):
             st.info("Loading example dataset...")
             # Load melanoma data
             # st.session_state.uploaded_file = ...
-            st.experimental_rerun()
+            st.rerun()
 
 # Data requirements
 with st.expander("ℹ️ Data Requirements"):
