@@ -20,7 +20,7 @@ suppressPackageStartupMessages({
 })
 
 # Source utility functions
-source("r_scripts/copykat_utils.R")
+source("backend/r_scripts/copykat_utils.R")
 
 # =============================================================================
 # Configuration and Setup

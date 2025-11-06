@@ -80,7 +80,7 @@ def run_copykat_analysis(params: Dict) -> Dict:
             }
     
     # Build R command
-    r_script_path = "backend/r_scripts/copykat_analysis.R"
+    r_script_path = "backend/r_scripts/copykat_simple.R"
     command = build_r_command(r_script_path, params)
     
     # Execute R script
