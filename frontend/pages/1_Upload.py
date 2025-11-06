@@ -15,6 +15,9 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
+# Import constants for example datasets
+from shared.constants import EXAMPLE_DATASETS
+
 # TODO: Import validators when implemented
 # from frontend.utils.validators import validate_expression_matrix
 
@@ -26,6 +29,15 @@ Upload your single-cell RNA-seq expression matrix. The file should contain:
 - **Columns**: Cells (with cell IDs as column names)
 - **Values**: Expression counts (raw or normalized)
 """)
+
+# Show status if example dataset is loaded
+if 'example_dataset' in st.session_state and st.session_state.example_dataset:
+    st.success(f"✅ Example dataset loaded: **{st.session_state.example_dataset.capitalize()}**")
+    st.info(f"📁 File path: `{st.session_state.example_file_path}`")
+    if st.button("Clear Example Dataset"):
+        st.session_state.example_dataset = None
+        st.session_state.example_file_path = None
+        st.rerun()
 
 # File uploader
 st.subheader("Upload Expression Matrix")
@@ -130,27 +142,31 @@ else:
     with col1:
         st.markdown("**Glioblastoma Dataset**")
         st.write("- Source: GSE57872")
-        st.write("- Cells: ~400")
-        st.write("- Genes: ~20,000")
-        
-        # TODO: Implement load example dataset
+        st.write(f"- Cells: {EXAMPLE_DATASETS['glioblastoma']['n_cells']}")
+        st.write(f"- Genes: {EXAMPLE_DATASETS['glioblastoma']['n_genes']}")
+
         if st.button("Load Glioblastoma Example"):
-            st.info("Loading example dataset...")
-            # Load glioblastoma data
-            # st.session_state.uploaded_file = ...
+            # Store example dataset path in session state
+            dataset_path = project_root / EXAMPLE_DATASETS['glioblastoma']['path']
+            st.session_state.example_dataset = 'glioblastoma'
+            st.session_state.example_file_path = str(dataset_path)
+            st.session_state.uploaded_file = None  # Clear any uploaded file
+            st.success("✅ Glioblastoma example loaded! Go to Configure page to run analysis.")
             st.rerun()
 
     with col2:
         st.markdown("**Melanoma Dataset**")
         st.write("- Source: GSE72056")
-        st.write("- Cells: ~4,000")
-        st.write("- Genes: ~23,000")
+        st.write(f"- Cells: {EXAMPLE_DATASETS['melanoma']['n_cells']}")
+        st.write(f"- Genes: {EXAMPLE_DATASETS['melanoma']['n_genes']}")
 
-        # TODO: Implement load example dataset
         if st.button("Load Melanoma Example"):
-            st.info("Loading example dataset...")
-            # Load melanoma data
-            # st.session_state.uploaded_file = ...
+            # Store example dataset path in session state
+            dataset_path = project_root / EXAMPLE_DATASETS['melanoma']['path']
+            st.session_state.example_dataset = 'melanoma'
+            st.session_state.example_file_path = str(dataset_path)
+            st.session_state.uploaded_file = None  # Clear any uploaded file
+            st.success("✅ Melanoma example loaded! Go to Configure page to run analysis.")
             st.rerun()
 
 # Data requirements
