@@ -68,7 +68,8 @@
     - Classification distribution chart
   - Download functionality for all results
   - Session state management
-- **Running on**: http://localhost:8502
+- **Running on**: http://localhost:8501
+- **Note**: Skeleton pages directory renamed to `pages_skeleton_backup/` to prevent Streamlit auto-loading conflicts
 
 ### Documentation
 - **File**: `CLAUDE.md`
@@ -137,6 +138,8 @@ None. Core functionality is complete and working.
 3. **R script path**: Currently hardcoded as `backend/r_scripts/copykat_simple.R` in `r_executor.py`. Should use constants.
 
 4. **Skeleton files**: Many skeleton files exist with TODOs but aren't used by current implementation.
+
+5. **Conda environment**: R executor now properly uses `conda run -n Project4-CNV-Cancer-RNAseq` to access environment with CopyKAT installed (fixed 2025-11-06).
 
 ---
 
@@ -237,10 +240,10 @@ print(results['summary'])
 ```bash
 streamlit run frontend/app_simple.py
 ```
-**Status**: ✅ Running on http://localhost:8502
+**Status**: ✅ Running on http://localhost:8501
 
 ### End-to-End Test
-1. Open http://localhost:8502
+1. Open http://localhost:8501
 2. Select "glioblastoma" example dataset
 3. Click "Run Analysis"
 4. Wait ~1.2 minutes

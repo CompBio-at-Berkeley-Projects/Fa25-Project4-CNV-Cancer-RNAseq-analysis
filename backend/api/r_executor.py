@@ -148,16 +148,24 @@ def run_copykat_analysis(params: Dict) -> Dict:
 def build_r_command(script_path: str, params: Dict) -> List[str]:
     """
     Build command line arguments for R script.
-    
+
     Args:
         script_path: Path to R script
         params: Analysis parameters
-    
+
     Returns:
         List of command arguments
     """
-    command = ["Rscript", script_path]
-    
+    # Use conda run to ensure correct R environment with CopyKAT installed
+    command = [
+        "/Users/hansonwen/anaconda3/bin/conda",
+        "run",
+        "-n",
+        "Project4-CNV-Cancer-RNAseq",
+        "Rscript",
+        script_path
+    ]
+
     # Add required arguments
     command.extend(["--input", params['input_file']])
     command.extend(["--output", params['output_dir']])
