@@ -111,7 +111,7 @@ with col1:
                 file_name=f"{result_source}_predictions.txt",
                 mime="text/plain",
                 help="Cell-level classification results",
-                use_container_width=True
+                width='stretch'
             )
 
     # CNV results
@@ -123,7 +123,7 @@ with col1:
                 file_name=f"{result_source}_CNA_results.txt",
                 mime="text/plain",
                 help="Segment-level CNV calls",
-                use_container_width=True
+                width='stretch'
             )
 
     # Heatmap
@@ -135,7 +135,7 @@ with col1:
                 file_name=f"{result_source}_heatmap.jpeg",
                 mime="image/jpeg",
                 help="CNV heatmap visualization",
-                use_container_width=True
+                width='stretch'
             )
 
 with col2:
@@ -155,7 +155,7 @@ with col2:
                     file_name=f"{result_source}_gene_by_cell.txt",
                     mime="text/plain",
                     help="Gene-by-cell CNV matrix",
-                    use_container_width=True
+                    width='stretch'
                 )
 
         # PDF heatmap with genes
@@ -168,7 +168,7 @@ with col2:
                     file_name=f"{result_source}_detailed_heatmap.pdf",
                     mime="application/pdf",
                     help="High-resolution heatmap with gene labels",
-                    use_container_width=True
+                    width='stretch'
                 )
 
         # RDS file (R data)
@@ -181,7 +181,7 @@ with col2:
                     file_name=f"{result_source}_clustering.rds",
                     mime="application/octet-stream",
                     help="R data object for further analysis",
-                    use_container_width=True
+                    width='stretch'
                 )
 
 st.markdown("---")
@@ -252,7 +252,7 @@ if predictions is not None and not predictions.empty:
                 file_name=f"{result_source}_predictions.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 help="Excel format with formatting",
-                use_container_width=True
+                width='stretch'
             )
         except ImportError:
             st.info("Install openpyxl for Excel export")

@@ -151,7 +151,7 @@ with st.form("analysis_parameters"):
     submit = st.form_submit_button(
         "🚀 Run Analysis",
         type="primary",
-        use_container_width=True
+        width='stretch'
     )
     
     if submit:
@@ -217,6 +217,13 @@ with st.form("analysis_parameters"):
                 # Run CopyKAT
                 result = run_copykat_analysis(params)
 
+                # Store console output in session state for display
+                st.session_state.last_analysis_output = {
+                    'stdout': result.get('stdout', ''),
+                    'stderr': result.get('stderr', ''),
+                    'success': result['success']
+                }
+
                 if result['success']:
                     # Parse results
                     parsed_results = parse_copykat_results(result['output_dir'])
@@ -237,6 +244,27 @@ with st.form("analysis_parameters"):
                     st.code(traceback.format_exc())
 
         st.session_state.analysis_running = False
+
+# Display console logs if available
+if st.session_state.get('last_analysis_output'):
+    st.markdown("---")
+    st.subheader("📋 Console Output")
+    
+    output_data = st.session_state.last_analysis_output
+    
+    # Show stdout (main console output)
+    if output_data.get('stdout'):
+        with st.expander("✅ Standard Output (stdout)", expanded=True):
+            st.code(output_data['stdout'], language='text')
+    
+    # Show stderr (warnings/errors)
+    if output_data.get('stderr'):
+        with st.expander("⚠️ Standard Error (stderr)", expanded=not output_data.get('success', True)):
+            st.code(output_data['stderr'], language='text')
+    
+    # If no output captured, show message
+    if not output_data.get('stdout') and not output_data.get('stderr'):
+        st.info("No console output captured. This may be normal for quick analyses.")
 
 # Parameter reference
 with st.expander("📖 Parameter Guide"):

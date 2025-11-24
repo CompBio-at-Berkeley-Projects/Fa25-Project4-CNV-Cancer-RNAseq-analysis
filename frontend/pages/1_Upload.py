@@ -100,7 +100,7 @@ if uploaded_file is not None:
                     st.metric("Estimated Total Genes", "> 1000")
                 
                 # Show preview
-                st.dataframe(df_preview.head(10), use_container_width=True)
+                st.dataframe(df_preview.head(10), width='stretch')
                 
                 # Data summary
                 with st.expander("📊 Data Summary"):

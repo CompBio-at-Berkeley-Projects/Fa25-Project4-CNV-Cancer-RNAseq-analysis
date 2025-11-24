@@ -65,11 +65,32 @@ cat(paste0("Genome: ", genome, "\n"))
 # Load data
 cat("Loading data...\n")
 if (grepl("\\.gz$", input_file)) {
-  exp_data <- read.table(gzfile(input_file), header = TRUE, row.names = 1, sep = "\t", check.names = FALSE)
+  # Read without row names first to handle duplicates
+  exp_data <- read.table(gzfile(input_file), header = TRUE, sep = "\t", check.names = FALSE, stringsAsFactors = FALSE)
 } else if (grepl("\\.rds$", input_file)) {
   exp_data <- readRDS(input_file)
 } else {
-  exp_data <- read.table(input_file, header = TRUE, row.names = 1, sep = "\t", check.names = FALSE)
+  # Read without row names first to handle duplicates
+  exp_data <- read.table(input_file, header = TRUE, sep = "\t", check.names = FALSE, stringsAsFactors = FALSE)
+}
+
+# Handle row names (first column)
+if (ncol(exp_data) > 0) {
+  # Get first column as potential row names
+  first_col <- exp_data[, 1]
+  
+  # Check for duplicates
+  n_duplicates <- sum(duplicated(first_col))
+  if (n_duplicates > 0) {
+    cat("Warning: Duplicate gene names detected. Making them unique...\n")
+    # Make duplicates unique by appending _1, _2, etc.
+    first_col <- make.unique(as.character(first_col), sep = "_")
+    cat(paste0("  Made ", n_duplicates, " duplicate names unique\n"))
+  }
+  
+  # Set row names and remove first column
+  rownames(exp_data) <- first_col
+  exp_data <- exp_data[, -1, drop = FALSE]
 }
 
 cat(paste0("Loaded: ", nrow(exp_data), " genes x ", ncol(exp_data), " cells\n"))

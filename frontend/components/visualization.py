@@ -74,7 +74,7 @@ def display_cnv_heatmap(results: Dict) -> None:
     
     if heatmap_path:
         try:
-            st.image(heatmap_path, use_column_width=True)
+            st.image(heatmap_path, width='stretch')
         except Exception as e:
             st.error(f"Error loading heatmap: {str(e)}")
     else:
@@ -97,7 +97,7 @@ def display_predictions_table(results: Dict) -> None:
             df = pd.read_csv(predictions_path, sep='\t')
             
             # Display dataframe
-            st.dataframe(df, use_container_width=True)
+            st.dataframe(df, width='stretch')
             
             # Display distribution
             with st.expander("Classification Distribution"):

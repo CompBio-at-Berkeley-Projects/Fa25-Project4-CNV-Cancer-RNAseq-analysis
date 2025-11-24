@@ -76,7 +76,7 @@ with st.sidebar:
 
     # Run button
     st.divider()
-    run_analysis = st.button("🚀 Run Analysis", type="primary", use_container_width=True)
+    run_analysis = st.button("🚀 Run Analysis", type="primary", width='stretch')
 
 # Main content area
 if run_analysis and input_file:
@@ -136,7 +136,7 @@ if st.session_state.analysis_complete and st.session_state.results:
     with tab1:
         st.subheader("CNV Heatmap")
         if 'heatmap' in results['file_paths']:
-            st.image(results['file_paths']['heatmap'], use_container_width=True)
+            st.image(results['file_paths']['heatmap'], width='stretch')
         else:
             st.warning("Heatmap not found")
 
@@ -146,7 +146,7 @@ if st.session_state.analysis_complete and st.session_state.results:
             # Display predictions table
             st.dataframe(
                 results['predictions'],
-                use_container_width=True,
+                width='stretch',
                 height=400
             )
 

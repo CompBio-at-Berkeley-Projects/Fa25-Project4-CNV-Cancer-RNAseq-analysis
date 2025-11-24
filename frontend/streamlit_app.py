@@ -106,7 +106,7 @@ def main():
     # Sidebar
     with st.sidebar:
         st.image("https://via.placeholder.com/200x80?text=CNV+Analysis",
-                 use_container_width=True)
+                 width='stretch')
         st.markdown("---")
         
         st.header("Navigation")

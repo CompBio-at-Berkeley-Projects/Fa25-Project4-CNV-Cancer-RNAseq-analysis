@@ -105,7 +105,7 @@ with tab1:
 
     file_paths = results.get('file_paths', {})
     if 'heatmap' in file_paths and Path(file_paths['heatmap']).exists():
-        st.image(file_paths['heatmap'], use_container_width=True,
+        st.image(file_paths['heatmap'], width='stretch',
                 caption="Copy Number Variation Heatmap - Red: amplification, Blue: deletion")
     else:
         st.warning("Heatmap not found")
@@ -139,7 +139,7 @@ with tab2:
         # Display table
         st.dataframe(
             filtered_df,
-            use_container_width=True,
+            width='stretch',
             height=400
         )
 
@@ -186,10 +186,10 @@ with tab4:
     st.markdown("### Parameters Used")
     if st.session_state.get('analysis_params'):
         params_df = pd.DataFrame([
-            {"Parameter": k, "Value": v}
+            {"Parameter": k, "Value": str(v)}
             for k, v in st.session_state.analysis_params.items()
         ])
-        st.dataframe(params_df, use_container_width=True, hide_index=True)
+        st.dataframe(params_df, width='stretch', hide_index=True)
     else:
         st.write("No parameter information available")
 

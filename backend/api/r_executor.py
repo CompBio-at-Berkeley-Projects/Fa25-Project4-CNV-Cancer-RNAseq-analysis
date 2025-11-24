@@ -50,6 +50,8 @@ def run_copykat_analysis(params: Dict) -> Dict:
             - summary: Dict of summary statistics
             - runtime_minutes: Analysis duration
             - error: Error message if failed (None otherwise)
+            - stdout: Standard output from R script execution
+            - stderr: Standard error from R script execution
     
     Example:
         >>> params = {
@@ -112,7 +114,9 @@ def run_copykat_analysis(params: Dict) -> Dict:
                 'summary': summary,
                 'runtime_minutes': runtime,
                 'error': None,
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.now().isoformat(),
+                'stdout': result.stdout,
+                'stderr': result.stderr
             }
         else:
             return {
@@ -121,7 +125,9 @@ def run_copykat_analysis(params: Dict) -> Dict:
                 'output_dir': None,
                 'files': {},
                 'summary': {},
-                'runtime_minutes': runtime
+                'runtime_minutes': runtime,
+                'stdout': result.stdout,
+                'stderr': result.stderr
             }
     
     except subprocess.CalledProcessError as e:
@@ -131,7 +137,9 @@ def run_copykat_analysis(params: Dict) -> Dict:
             'output_dir': None,
             'files': {},
             'summary': {},
-            'runtime_minutes': 0
+            'runtime_minutes': 0,
+            'stdout': e.stdout if hasattr(e, 'stdout') else '',
+            'stderr': e.stderr if hasattr(e, 'stderr') else str(e)
         }
     
     except Exception as e:
@@ -141,7 +149,9 @@ def run_copykat_analysis(params: Dict) -> Dict:
             'output_dir': None,
             'files': {},
             'summary': {},
-            'runtime_minutes': 0
+            'runtime_minutes': 0,
+            'stdout': '',
+            'stderr': str(e)
         }
 
 
