@@ -12,14 +12,15 @@ A user-friendly, interactive web application for Copy Number Variation (CNV) ana
 
 ## Project Overview
 
-This project provides an intuitive Streamlit dashboard for analyzing copy number variations (CNVs) from single-cell RNA-seq data. It helps researchers distinguish malignant cells from non-malignant cells and visualize genomic instability in cancer datasets.
+This project provides an intuitive web application for analyzing copy number variations (CNVs) from single-cell RNA-seq data. It helps researchers distinguish malignant cells from non-malignant cells and visualize genomic instability in cancer datasets.
 
 ### Technology Stack
 
-- **Frontend**: Python with Streamlit framework
-- **Backend**: R with CopyKAT package
-- **Integration**: Python subprocess bridge
-- **Architecture**: Monorepo with clear frontend/backend separation
+- **Frontend**: React + TypeScript + Tailwind CSS (modern web UI)
+- **Backend API**: FastAPI (Python REST API)
+- **Analysis Engine**: R with CopyKAT package
+- **Integration**: Python subprocess bridge connecting API to R scripts
+- **Architecture**: Decoupled 3-tier architecture (Frontend ↔ API ↔ R Engine)
 
 ## Project Structure
 
@@ -27,13 +28,18 @@ This project provides an intuitive Streamlit dashboard for analyzing copy number
 Fa25-Project4-CNV-Cancer-RNAseq-analysis/
 ├── instructions.md              # Main onboarding guide (START HERE!)
 │
-├── frontend/                    # Streamlit UI (Baovi)
-│   ├── frontend.md             # Frontend development guide
-│   ├── streamlit_app.py        # Main application
-│   ├── pages/                  # Multi-page app
-│   ├── components/             # Reusable UI components
-│   ├── utils/                  # Frontend utilities
-│   └── requirements.txt        # Python dependencies
+├── frontend/                    # React + TypeScript UI
+│   ├── src/
+│   │   ├── api/                # API client utilities
+│   │   ├── components/         # React components
+│   │   ├── hooks/              # Custom React hooks
+│   │   ├── pages/              # Page components
+│   │   ├── utils/              # Utility functions
+│   │   └── types/              # TypeScript types
+│   ├── package.json            # Node.js dependencies
+│   └── vite.config.ts          # Vite configuration
+│
+├── frontend_legacy/             # Legacy Streamlit app (backup)
 │
 ├── backend/                     # R analysis engine (Rajan & Jimmy)
 │   ├── backend.md              # Backend development guide
@@ -45,10 +51,15 @@ Fa25-Project4-CNV-Cancer-RNAseq-analysis/
 │   │   ├── copykat_utils.R              # Utilities (TODO)
 │   │   ├── data_preprocessing.R         # Preprocessing (TODO)
 │   │   └── copykat_report.Rmd           # Report template (TODO)
-│   └── api/                    # Python-R bridge
-│       ├── r_executor.py       # Execute R scripts
-│       ├── result_parser.py    # Parse outputs
-│       └── status_monitor.py   # Monitor progress
+│   ├── api/                    # Python-R bridge & FastAPI
+│   │   ├── routes.py           # FastAPI endpoints
+│   │   ├── models.py           # Pydantic models
+│   │   ├── services.py         # Business logic layer
+│   │   ├── r_executor.py       # Execute R scripts
+│   │   ├── result_parser.py    # Parse outputs
+│   │   └── status_monitor.py   # Monitor progress
+│   ├── main.py                 # FastAPI application entry
+│   └── requirements.txt        # Python dependencies
 │
 ├── shared/                      # Shared utilities
 │   ├── shared.md               # Shared documentation
@@ -96,9 +107,10 @@ Fa25-Project4-CNV-Cancer-RNAseq-analysis/
 
 ### Prerequisites
 
-- **Python 3.8+** (for frontend)
-- **R 4.0+** (for backend)
-- **Conda environment** (recommended)
+- **Node.js 18+** and **npm** (for React frontend)
+- **Python 3.8+** (for FastAPI backend)
+- **R 4.0+** (for CopyKAT analysis)
+- **Conda environment** (recommended for R)
 
 ### Installation
 
@@ -121,32 +133,52 @@ Fa25-Project4-CNV-Cancer-RNAseq-analysis/
    R -e 'install.packages(c("yaml", "logger", "rmarkdown", "ggplot2"), repos="http://cran.rstudio.com/")'
    ```
 
-4. **Install Python packages** (frontend)
+4. **Install Python packages** (backend API)
    ```bash
-   pip install -r frontend/requirements.txt
+   pip install -r backend/requirements.txt
    ```
 
-5. **Verify installation**
+5. **Install Node.js packages** (frontend)
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+6. **Verify installation**
    ```bash
    # Test R
    R -e 'library(copykat); library(yaml); library(logger)'
    
-   # Test Python
-   streamlit hello
+   # Test Python/FastAPI
+   python -c "import fastapi; print('FastAPI installed')"
+   
+   # Test Node.js
+   npm --version
    ```
 
 ## Running the Application
 
-### Frontend (Streamlit Dashboard)
+### Quick Start (Both Servers)
 
+**Terminal 1 - Backend API:**
 ```bash
 # From project root
-streamlit run frontend/streamlit_app.py
+python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-The app will open in your browser at `http://localhost:8501`
+**Terminal 2 - Frontend:**
+```bash
+# From project root
+cd frontend
+npm run dev
+```
 
-### Backend (R Analysis)
+The application will be available at:
+- **Frontend**: http://localhost:5173 (React app)
+- **Backend API**: http://localhost:8000 (FastAPI)
+- **API Docs**: http://localhost:8000/docs (Swagger UI)
+
+### Backend (R Analysis - Standalone)
 
 ```bash
 # Test the complete working example
@@ -195,8 +227,8 @@ Results will be in `backend/results/test_sample_*/`
 - [Product Requirements Document](Product%20Requirements%20Document%20(PRD)_%20CNV-Cancer-RNAseq-analysis.md)
 
 ### For Frontend Team
-- [frontend/frontend.md](frontend/frontend.md) - Frontend development guide
-- [docs/05_STREAMLIT_DASHBOARD_DESIGN.md](docs/05_STREAMLIT_DASHBOARD_DESIGN.md)
+- [frontend_legacy/frontend.md](frontend_legacy/frontend.md) - Legacy Streamlit guide
+- [API_DOCS.md](API_DOCS.md) - FastAPI endpoint documentation
 - [docs/06_PYTHON_R_INTEGRATION.md](docs/06_PYTHON_R_INTEGRATION.md)
 
 ### For Backend Team
@@ -226,7 +258,8 @@ Results will be in `backend/results/test_sample_*/`
 
 ## Project Goals
 
-- Provide intuitive Streamlit dashboard for CNV analysis
+- Provide modern, responsive web interface for CNV analysis
+- RESTful API architecture for easy integration
 - Automate CopyKAT analysis pipeline
 - Enable reproducible research
 - Support multiple cancer datasets
@@ -289,4 +322,4 @@ This project is for educational purposes as part of Fa25-Project4.
 
 ---
 
-**Built with Streamlit and CopyKAT**
+**Built with React, FastAPI, and CopyKAT**

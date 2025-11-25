@@ -65,9 +65,6 @@ def run_copykat_analysis(params: Dict) -> Dict:
         >>> if result['success']:
         ...     print(f"Results in: {result['output_dir']}")
     """
-    # TODO: Implement actual R script execution
-    # This is a skeleton showing the expected structure
-    
     # Validate required parameters
     required_params = ['input_file', 'sample_name', 'output_dir', 'genome']
     for param in required_params:
@@ -81,9 +78,22 @@ def run_copykat_analysis(params: Dict) -> Dict:
                 'runtime_minutes': 0
             }
     
-    # Build R command
-    r_script_path = "backend/r_scripts/copykat_simple.R"
-    command = build_r_command(r_script_path, params)
+    # Build R command with absolute path
+    project_root = Path(get_project_root())
+    r_script_path = project_root / "backend" / "r_scripts" / "copykat_simple.R"
+
+    # Validate R script exists
+    if not r_script_path.exists():
+        return {
+            'success': False,
+            'error': f"R script not found: {r_script_path}",
+            'output_dir': None,
+            'files': {},
+            'summary': {},
+            'runtime_minutes': 0
+        }
+
+    command = build_r_command(str(r_script_path), params)
     
     # Execute R script
     try:
@@ -167,11 +177,15 @@ def build_r_command(script_path: str, params: Dict) -> List[str]:
         List of command arguments
     """
     # Use conda run to ensure correct R environment with CopyKAT installed
+    # Get conda path from environment variable or use default
+    conda_path = os.environ.get('CONDA_PATH', '/Users/hansonwen/anaconda3/bin/conda')
+    conda_env = os.environ.get('CONDA_ENV', 'Project4-CNV-Cancer-RNAseq')
+
     command = [
-        "/Users/hansonwen/anaconda3/bin/conda",
+        conda_path,
         "run",
         "-n",
-        "Project4-CNV-Cancer-RNAseq",
+        conda_env,
         "Rscript",
         script_path
     ]
@@ -213,20 +227,17 @@ def build_r_command(script_path: str, params: Dict) -> List[str]:
 def find_output_directory(base_dir: str, sample_name: str) -> Optional[str]:
     """
     Find the output directory created by R script.
-    
+
     R script creates directory with timestamp, so we need to find it.
-    
+    Looks for directories matching pattern: {sample_name}_* and returns the most recent.
+
     Args:
         base_dir: Base output directory
         sample_name: Sample name
-    
+
     Returns:
         Full path to output directory or None
     """
-    # TODO: Implement directory search
-    # Look for directories matching pattern: {sample_name}_*
-    # Return the most recent one
-    
     base_path = Path(base_dir)
     if not base_path.exists():
         return None
@@ -271,10 +282,11 @@ def locate_output_files(output_dir: str, sample_name: str) -> Dict[str, str]:
 def extract_summary_statistics(files: Dict[str, str]) -> Dict:
     """
     Extract summary statistics from output files.
-    
+    Reads predictions file and counts cell types (aneuploid, diploid, not.defined).
+
     Args:
         files: Dictionary of file paths
-    
+
     Returns:
         Dictionary of summary statistics
     """
@@ -285,9 +297,7 @@ def extract_summary_statistics(files: Dict[str, str]) -> Dict:
         'n_not_defined': 0,
         'aneuploid_fraction': 0.0
     }
-    
-    # TODO: Implement actual parsing
-    # Read predictions file and count cell types
+
     predictions_file = files.get('predictions')
     
     if predictions_file and Path(predictions_file).exists():
@@ -315,11 +325,10 @@ def extract_summary_statistics(files: Dict[str, str]) -> Dict:
 def get_project_root() -> str:
     """
     Get absolute path to project root.
-    
+    Assumes this file is in backend/api/ directory.
+
     Returns:
         Project root directory path
     """
-    # TODO: Make this more robust
-    # For now, assume we're in backend/api/
     return str(Path(__file__).parent.parent.parent)
 
