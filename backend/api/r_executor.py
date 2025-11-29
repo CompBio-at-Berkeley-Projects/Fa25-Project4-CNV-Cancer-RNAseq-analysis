@@ -15,7 +15,8 @@ import json
 from pathlib import Path
 from typing import Dict, List, Optional
 from datetime import datetime
-
+import threading
+import time
 
 def run_copykat_analysis(params: Dict) -> Dict:
     """
@@ -99,6 +100,15 @@ def run_copykat_analysis(params: Dict) -> Dict:
     try:
         start_time = datetime.now()
         
+        # Use Popen to capture output in real-time if we wanted to stream
+        # For now we just run it and capture everything at once for the result
+        # But to support logs we might want to direct stdout/stderr to a known file location
+        # or capture it here.
+        
+        # For simplicity in this iteration, we still use run() but we ensure
+        # that the R script writes to a log file that we can read.
+        # The copykat_simple.R script should already be logging to console.
+        
         result = subprocess.run(
             command,
             capture_output=True,
@@ -176,19 +186,25 @@ def build_r_command(script_path: str, params: Dict) -> List[str]:
     Returns:
         List of command arguments
     """
-    # Use conda run to ensure correct R environment with CopyKAT installed
-    # Get conda path from environment variable or use default
-    conda_path = os.environ.get('CONDA_PATH', '/Users/hansonwen/anaconda3/bin/conda')
-    conda_env = os.environ.get('CONDA_ENV', 'Project4-CNV-Cancer-RNAseq')
-
-    command = [
-        conda_path,
-        "run",
-        "-n",
-        conda_env,
-        "Rscript",
-        script_path
-    ]
+    # Check if running in Docker mode (no conda needed)
+    docker_mode = os.environ.get('DOCKER_MODE', 'false').lower() == 'true'
+    
+    if docker_mode:
+        # In Docker: R and CopyKAT are installed system-wide
+        r_executable = os.environ.get('R_EXECUTABLE', 'Rscript')
+        command = [r_executable, script_path]
+    else:
+        # Local development: Use conda environment
+        conda_path = os.environ.get('CONDA_PATH', '/Users/hansonwen/anaconda3/bin/conda')
+        conda_env = os.environ.get('CONDA_ENV', 'Project4-CNV-Cancer-RNAseq')
+        command = [
+            conda_path,
+            "run",
+            "-n",
+            conda_env,
+            "Rscript",
+            script_path
+        ]
 
     # Add required arguments
     command.extend(["--input", params['input_file']])
@@ -331,4 +347,3 @@ def get_project_root() -> str:
         Project root directory path
     """
     return str(Path(__file__).parent.parent.parent)
-

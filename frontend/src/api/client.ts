@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+// In production (Docker), use relative URL that nginx proxies
+// In development, use the full backend URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -26,8 +28,22 @@ export const fetchFiles = async () => {
     return response.data;
 };
 
-export const runAnalysis = async (params: any) => {
+export const runAnalysis = async (params: unknown) => {
     const response = await apiClient.post('/run', params);
     return response.data;
 };
 
+export const getAnalysisStatus = async (taskId: string) => {
+    const response = await apiClient.get(`/status/${taskId}`);
+    return response.data;
+};
+
+export const fetchAnalyses = async () => {
+    const response = await apiClient.get('/analyses');
+    return response.data;
+};
+
+export const fetchAnalysisResult = async (analysisId: string) => {
+    const response = await apiClient.get(`/results/${analysisId}`);
+    return response.data;
+};

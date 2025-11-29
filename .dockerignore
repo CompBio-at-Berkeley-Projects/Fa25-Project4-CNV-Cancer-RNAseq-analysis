@@ -1,0 +1,78 @@
+# Git
+.git
+.gitignore
+
+# IDE and Editor
+.vscode
+.idea
+*.swp
+*.swo
+.cursor
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+.eggs
+dist
+build
+*.egg
+.pytest_cache
+.tox
+.coverage
+htmlcov
+.mypy_cache
+
+# Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# Frontend build artifacts (we rebuild in Docker)
+frontend/dist
+frontend/build
+
+# Environment files (don't include secrets)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Documentation not needed in container
+docs/
+*.md
+!README.md
+
+# Test files
+tests/
+*.test.*
+*.spec.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Results (mount as volume instead)
+backend/results/*
+!backend/results/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Large data files (mount as volumes instead)
+backend/data/raw/*
+!backend/data/raw/.gitkeep
+
+# Legacy frontend
+frontend_legacy/
+
+# Editor backup files
+*~
+

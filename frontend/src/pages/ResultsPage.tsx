@@ -1,14 +1,29 @@
-import React from 'react';
 import { useAnalysisContext } from '../context/AnalysisContext';
 import { useNavigate } from 'react-router-dom';
 import { AlertTriangle, Download, BarChart2, PieChart } from 'lucide-react';
+import ImageModal from '../components/ui/ImageModal';
 
 const API_BASE_URL = 'http://localhost:8000';
 
 const getResultUrl = (filePath: string | undefined): string | null => {
     if (!filePath) return null;
-    const match = filePath.match(/backend\/results\/(.+)/);
-    return match ? `${API_BASE_URL}/results/${match[1]}` : null;
+    // Normalize path separators to forward slashes
+    const normalizedPath = filePath.replace(/\\/g, '/');
+    
+    // Try to find 'results/' in the path
+    const resultsIndex = normalizedPath.lastIndexOf('/results/');
+    if (resultsIndex !== -1) {
+        return `${API_BASE_URL}/results/${normalizedPath.substring(resultsIndex + 9)}`; // +9 for length of "/results/"
+    }
+    
+    // Fallback for relative paths starting with backend/results
+    const backendIndex = normalizedPath.indexOf('backend/results/');
+    if (backendIndex !== -1) {
+        return `${API_BASE_URL}/results/${normalizedPath.substring(backendIndex + 16)}`;
+    }
+
+    console.warn('Could not generate URL for path:', filePath);
+    return null;
 };
 
 const ResultsPage = () => {
@@ -115,10 +130,9 @@ const ResultsPage = () => {
                         CNV Heatmap
                     </h3>
                     <div className="aspect-video bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
-                         <img
+                         <ImageModal
                             src={getResultUrl(analysisResult.files.heatmap)!}
                             alt="CNV Heatmap"
-                            className="max-w-full max-h-full object-contain"
                         />
                     </div>
                 </div>
@@ -128,4 +142,3 @@ const ResultsPage = () => {
 };
 
 export default ResultsPage;
-

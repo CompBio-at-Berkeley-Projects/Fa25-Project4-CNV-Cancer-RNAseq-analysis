@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNV-Cancer-RNAseq-analysis Research Poster</title>
+    <style>
+        :root {
+            --primary-color: #1a365d; /* Darker, more professional blue */
+            --secondary-color: #2d3748; /* Dark slate gray */
+            --accent-color: #3182ce; /* Bright professional blue */
+            --bg-color: #f7fafc; /* Very light gray/white background */
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+            --header-height: 120px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .poster-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+            grid-template-rows: auto 1fr; /* Header then content */
+            gap: 24px; /* Consistent spacing */
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            margin-bottom: 10px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .qr-container {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 5px;
+            box-shadow: none; /* Override default img shadow */
+        }
+
+        .qr-label {
+            font-size: 0.8em;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.8em;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .authors {
+            font-size: 1.1em;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .affiliation {
+            font-style: italic;
+            color: #718096;
+            font-size: 1em;
+        }
+
+        /* Column Layout - Explicit Placement */
+        .col-1 { grid-column: 1; }
+        .col-2 { grid-column: 2; }
+        .col-3 { grid-column: 3; }
+
+        /* Card Design */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 24px; /* Spacing between stacked cards in a column */
+            border: 1px solid #e2e8f0;
+            border-top: 4px solid var(--accent-color);
+            height: fit-content; /* Let cards take natural height */
+        }
+
+        /* Ensure columns fill height if needed, or just flow naturally */
+        .column-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 12px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        img {
+            display: block;
+            margin: 15px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .img-caption {
+            text-align: center;
+            font-size: 0.9em;
+            color: #718096;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 1100px) {
+            .poster-container {
+                grid-template-columns: 1fr; /* Stack on smaller screens */
+                padding: 20px;
+            }
+            .col-1, .col-2, .col-3 { grid-column: auto; }
+            .column-wrapper { display: contents; } /* Flatten columns */
+        }
+    </style>
+</head>
+<body>
+    <div class="poster-container">
+        <header>
+            <h1>CNV-Cancer-RNAseq-analysis</h1>
+            <div class="authors">Baovi Nguyen, Rajan Tavathia, Jimmy Liu, Allison Cheng, Hanson Wen</div>
+            <div class="affiliation">Computational Biology @ Berkeley</div>
+            
+            <div class="qr-container">
+                <img src="repo_qr.png" alt="GitHub Repository" class="qr-code">
+                <div class="qr-label">View on GitHub</div>
+            </div>
+        </header>
+
+        <!-- Column 1: Intro & Background -->
+        <div class="column-wrapper col-1">
+            <div class="card">
+                <h2>Abstract</h2>
+                <p>
+                    We present a user-friendly, hybrid <strong>Python/R application</strong> for Copy Number Variation (CNV) analysis from single-cell RNA sequencing data. 
+                    Using the <strong>CopyKAT</strong> algorithm, our tool distinguishes malignant cells from normal cells and visualizes genomic instability, 
+                    addressing the critical challenge of identifying tumor subpopulations in heterogeneous tissue samples.
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>Background & Motivation</h2>
+                <p>
+                    <strong>The Challenge:</strong> Tumor samples are mixtures of malignant, immune, and stromal cells. Traditional clustering struggles to distinguish them based on expression alone.
+                </p>
+                <p>
+                    <strong>The Solution:</strong> Cancer cells exhibit <strong>genomic instability</strong> (CNVs). CopyKAT exploits this by detecting:
+                </p>
+                <ul>
+                    <li><strong>Amplifications:</strong> Gains in chromosome regions (e.g., EGFR in Glioblastoma).</li>
+                    <li><strong>Deletions:</strong> Losses of regions (e.g., PTEN tumor suppressor).</li>
+                </ul>
+                <img src="bio_context.png" alt="Biological Context Diagram">
+                <div class="img-caption">Fig 1. Biological basis of CNV analysis.</div>
+            </div>
+
+            <div class="card">
+                <h2>Methodology: CopyKAT Pipeline</h2>
+                <p>The core analysis follows a robust 10-step pipeline:</p>
+                <ol>
+                    <li><strong>Input:</strong> Gene expression matrix (genes x cells).</li>
+                    <li><strong>Filtering:</strong> Remove low-quality cells/genes.</li>
+                    <li><strong>Smoothing:</strong> Variance stabilization & chromosomal smoothing.</li>
+                    <li><strong>Baseline:</strong> Identify diploid cells as normal reference.</li>
+                    <li><strong>Inference:</strong> Compare all cells to baseline to find CNVs.</li>
+                    <li><strong>Classification:</strong> Label cells as Aneuploid vs. Diploid.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Column 2: Architecture & Implementation -->
+        <div class="column-wrapper col-2">
+            <div class="card">
+                <h2>System Architecture</h2>
+                <p>
+                    The project utilizes a modern, decoupled 3-tier architecture designed for scalability and reproducibility.
+                </p>
+                <ul>
+                    <li><strong>Frontend:</strong> React + TypeScript + Tailwind CSS (Responsive UI).</li>
+                    <li><strong>Backend:</strong> FastAPI (Python) for API management.</li>
+                    <li><strong>Analysis Engine:</strong> R + CopyKAT package for computation.</li>
+                </ul>
+                
+                <h3>Data Flow</h3>
+                <img src="data_flow.png" alt="Data Flow Sequence Diagram">
+                <div class="img-caption">Fig 2. End-to-end data processing flow.</div>
+            </div>
+
+            <div class="card">
+                <h2>Deployment & Infrastructure</h2>
+                <p>
+                    To ensure reproducibility across different scientific environments, the application is containerized using Docker.
+                </p>
+                <img src="architecture.png" alt="System Architecture Diagram">
+                <div class="img-caption">Fig 3. Docker container architecture.</div>
+                <p>
+                    <strong>Key Features:</strong>
+                    <ul>
+                        <li>Auto-detection of log-transformed data.</li>
+                        <li>Timestamped output directories to prevent overwrites.</li>
+                        <li>No direct R calls from frontend; secure Python bridge.</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+
+        <!-- Column 3: Results & Impact -->
+        <div class="column-wrapper col-3">
+            <div class="card">
+                <h2>Results: Glioblastoma Case Study</h2>
+                <p>
+                    Validated using the <strong>GSE57872</strong> dataset (Patel et al., 2014).
+                </p>
+                <ul>
+                    <li><strong>Input:</strong> ~400 single cells.</li>
+                    <li><strong>Runtime:</strong> ~1.2 minutes (Docker mode).</li>
+                    <li><strong>Output:</strong>
+                        <ul>
+                            <li>222 Aneuploid (40.88%)</li>
+                            <li>321 Diploid (59.12%)</li>
+                        </ul>
+                    </li>
+                </ul>
+                <img src="heatmap.jpeg" alt="CopyKAT Heatmap">
+                <div class="img-caption">Fig 4. CopyKAT Heatmap showing chromosomal amplifications (Red) and deletions (Blue).</div>
+            </div>
+
+            <div class="card">
+                <h2>Future Directions</h2>
+                <ul>
+                    <li><strong>Performance:</strong> Optimization for large datasets (>10k cells).</li>
+                    <li><strong>Features:</strong> Integration with <em>inferCNV</em> for comparative analysis.</li>
+                    <li><strong>DevOps:</strong> Full CI/CD pipeline for automated testing.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Conclusion</h2>
+                <p>
+                    <strong>CNV-Cancer-RNAseq-analysis</strong> successfully democratizes access to advanced single-cell CNV analysis. By wrapping the complex CopyKAT R package in a modern, intuitive web interface, we enable researchers to focus on biological interpretation rather than computational setup.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
