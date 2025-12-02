@@ -26,3 +26,4 @@ def generate_qr():
 if __name__ == "__main__":
     generate_qr()
 
+
