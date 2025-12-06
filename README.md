@@ -4,11 +4,28 @@ A user-friendly, interactive web application for Copy Number Variation (CNV) ana
 
 ## Quick Start
 
-**New Team Member?** Start here: [instructions.md](instructions.md)
+### Docker Deployment (Recommended)
 
-**Frontend Developer?** Read: [frontend/frontend.md](frontend/frontend.md)
+The easiest way to run the application is using Docker:
 
-**Backend Developer?** Read: [backend/backend.md](backend/backend.md)
+```bash
+# Build and start all services
+docker compose up --build
+
+# Access the application
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8000
+```
+
+See the [Docker Deployment](#docker-deployment) section below for detailed instructions.
+
+### Local Development
+
+**Getting Started?** Start here: [docs/project-docs/instructions.md](docs/project-docs/instructions.md)
+
+**Frontend Development?** Read: [frontend/frontend.md](frontend/frontend.md)
+
+**Backend Development?** Read: [backend/backend.md](backend/backend.md)
 
 ## Project Overview
 
@@ -26,7 +43,11 @@ This project provides an intuitive web application for analyzing copy number var
 
 ```
 Fa25-Project4-CNV-Cancer-RNAseq-analysis/
-├── instructions.md              # Main onboarding guide (START HERE!)
+├── docs/
+│   └── project-docs/
+│       ├── instructions.md      # Main onboarding guide
+│       ├── prd.md               # Product requirements
+│       └── API_DOCS.md          # API documentation
 │
 ├── frontend/                    # React + TypeScript UI
 │   ├── src/
@@ -41,7 +62,7 @@ Fa25-Project4-CNV-Cancer-RNAseq-analysis/
 │
 ├── frontend_legacy/             # Legacy Streamlit app (backup)
 │
-├── backend/                     # R analysis engine (Rajan & Jimmy)
+├── backend/                     # R analysis engine
 │   ├── backend.md              # Backend development guide
 │   ├── data/                   # Data files
 │   ├── results/                # Analysis outputs
@@ -84,24 +105,6 @@ Fa25-Project4-CNV-Cancer-RNAseq-analysis/
 │
 └── Product Requirements Document (PRD)_*.md
 ```
-
-## Team Assignments
-
-### Baovi Nguyen - Frontend Lead
-- **Role**: Streamlit UI development
-- **Read**: [instructions.md](instructions.md) → [frontend/frontend.md](frontend/frontend.md)
-- **Work in**: `frontend/` directory
-- **Reference**: [docs/05_STREAMLIT_DASHBOARD_DESIGN.md](docs/05_STREAMLIT_DASHBOARD_DESIGN.md)
-
-### Rajan Tavathia & Jimmy Liu - Backend Team
-- **Role**: R script implementation and CopyKAT integration
-- **Read**: [instructions.md](instructions.md) → [backend/backend.md](backend/backend.md)
-- **Work in**: `backend/r_scripts/` directory
-- **Reference**: `backend/r_scripts/example_complete_workflow.R` (complete working example)
-
-### Allison Cheng
-- **Current Assignment**: Project familiarization
-- **Read**: [instructions.md](instructions.md) and project documentation
 
 ## Quick Setup
 
@@ -222,21 +225,21 @@ Results will be in `backend/results/test_sample_*/`
 
 ## Key Documentation
 
-### For All Team Members
-- [instructions.md](instructions.md) - Main onboarding and team guide
-- [Product Requirements Document](Product%20Requirements%20Document%20(PRD)_%20CNV-Cancer-RNAseq-analysis.md)
+### Getting Started
+- [docs/project-docs/instructions.md](docs/project-docs/instructions.md) - Main onboarding guide
+- [docs/project-docs/prd.md](docs/project-docs/prd.md) - Product requirements
 
-### For Frontend Team
+### Frontend Development
 - [frontend_legacy/frontend.md](frontend_legacy/frontend.md) - Legacy Streamlit guide
-- [API_DOCS.md](API_DOCS.md) - FastAPI endpoint documentation
+- [docs/project-docs/API_DOCS.md](docs/project-docs/API_DOCS.md) - FastAPI endpoint documentation
 - [docs/06_PYTHON_R_INTEGRATION.md](docs/06_PYTHON_R_INTEGRATION.md)
 
-### For Backend Team
+### Backend Development
 - [backend/backend.md](backend/backend.md) - Backend development guide
 - [backend/data/DATA_GUIDE.md](backend/data/DATA_GUIDE.md)
 - [docs/01_COPYKAT_OVERVIEW.md](docs/01_COPYKAT_OVERVIEW.md) through [docs/11_AUTOMATED_PIPELINE_GUIDE.md](docs/11_AUTOMATED_PIPELINE_GUIDE.md)
 
-### For Everyone
+### Additional Resources
 - [docs/07_TROUBLESHOOTING.md](docs/07_TROUBLESHOOTING.md)
 - [docs/GLOSSARY.md](docs/GLOSSARY.md)
 
@@ -263,7 +266,6 @@ Results will be in `backend/results/test_sample_*/`
 - Automate CopyKAT analysis pipeline
 - Enable reproducible research
 - Support multiple cancer datasets
-- Clear team collaboration structure
 
 ## Critical Rules
 
@@ -275,10 +277,9 @@ Results will be in `backend/results/test_sample_*/`
 
 ## Getting Help
 
-- Check [instructions.md](instructions.md) first
-- Read role-specific guides ([frontend.md](frontend/frontend.md) or [backend.md](backend/backend.md))
+- Check [docs/project-docs/instructions.md](docs/project-docs/instructions.md) first
+- Read development guides ([frontend.md](frontend/frontend.md) or [backend.md](backend/backend.md))
 - Review [docs/07_TROUBLESHOOTING.md](docs/07_TROUBLESHOOTING.md)
-- Ask in team channel
 - Create GitHub issue for bugs
 
 ## Testing
@@ -291,9 +292,175 @@ python -m unittest discover tests
 python -m unittest tests/test_frontend.py
 ```
 
+## Docker Deployment
+
+### Prerequisites
+
+- **Docker Desktop** (Windows/Mac) or **Docker Engine** (Linux)
+- **8GB+ RAM** (16GB+ recommended for large datasets)
+- **10GB+ free disk space**
+
+### Installing Docker
+
+**Windows/Mac**: Download from [docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop/)
+
+**Linux (Ubuntu/Debian)**:
+```bash
+sudo apt-get update
+sudo apt-get install -y docker.io docker-compose-plugin
+sudo usermod -aG docker $USER  # Add user to docker group
+```
+
+### Quick Start with Docker
+
+1. **Clone or download the repository**
+   ```bash
+   git clone <repository-url>
+   cd Fa25-Project4-CNV-Cancer-RNAseq-analysis
+   ```
+
+2. **Start the application**
+   ```bash
+   docker compose up --build
+   ```
+   
+   > First run takes 15-30 minutes to build. Subsequent starts are faster.
+
+3. **Access the application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Docs: http://localhost:8000/docs
+
+4. **Stop the application**
+   ```bash
+   # Press Ctrl+C, or run:
+   docker compose down
+   ```
+
+### Docker Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Docker Network                           │
+│  ┌──────────────────┐      ┌──────────────────────────────┐│
+│  │    Frontend      │      │         Backend              ││
+│  │   (Nginx)        │─────▶│   (Python + R + CopyKAT)    ││
+│  │   Port 3000      │ /api │       Port 8000             ││
+│  └──────────────────┘      └──────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Running in Background
+
+```bash
+# Start in background (detached mode)
+docker compose up -d --build
+
+# View logs
+docker compose logs -f
+
+# Check status
+docker compose ps
+
+# Stop services
+docker compose down
+```
+
+### Working with Your Data
+
+**Upload via Web Interface**: Use the Upload page to add your data files
+
+**Direct File Copy**: Copy data to `backend/data/uploads/`
+
+**Export Results**:
+```bash
+# Copy results from container to local machine
+docker cp copykat-backend:/app/results ./my_results
+```
+
+### System Requirements by Dataset Size
+
+| Dataset Size | RAM Required | Expected Runtime |
+|--------------|--------------|------------------|
+| ~500 cells | 4 GB | 2-5 minutes |
+| ~2,000 cells | 8 GB | 10-20 minutes |
+| ~5,000 cells | 12 GB | 30-60 minutes |
+| ~10,000+ cells | 16 GB+ | 1-3 hours |
+
+### Docker Resource Configuration
+
+Increase Docker's memory allocation in Docker Desktop:
+1. Click Docker icon → Settings → Resources
+2. Increase Memory to 8-16 GB
+3. Click "Apply & Restart"
+
+### Troubleshooting Docker
+
+**"Port already in use"**: Change port in `docker-compose.yml`:
+```yaml
+frontend:
+  ports:
+    - "8080:80"  # Change from 3000 to 8080
+```
+
+**"Out of memory"**: Increase Docker memory allocation (see above)
+
+**Build errors**: Clean and rebuild:
+```bash
+docker compose down
+docker system prune -f
+docker compose up --build
+```
+
+**View logs**:
+```bash
+# All logs
+docker compose logs
+
+# Backend only
+docker compose logs backend
+
+# Follow in real-time
+docker compose logs -f
+```
+
+### Environment Variables
+
+Create a `.env` file in the project root to customize:
+```bash
+# .env
+DOCKER_MODE=true
+R_EXECUTABLE=Rscript
+VITE_API_BASE_URL=/api
+BACKEND_PORT=8000
+FRONTEND_PORT=3000
+```
+
+### Advanced: Running on Remote Server
+
+```bash
+# Start services
+docker compose up -d
+
+# Access from other computers
+# http://SERVER_IP:3000
+```
+
+For production deployments, configure a reverse proxy (nginx/traefik) with HTTPS.
+
+### Cleanup
+
+```bash
+# Stop and remove containers
+docker compose down
+
+# Full cleanup (removes all data!)
+docker compose down -v
+docker system prune -af
+```
+
 ## Future Work
 
-- Docker containerization
 - CI/CD pipeline
 - Additional CNV analysis tools (inferCNV)
 - Extended test coverage
@@ -301,18 +468,11 @@ python -m unittest tests/test_frontend.py
 
 ## Contributing
 
-See [instructions.md](instructions.md) for detailed contribution guidelines.
+See [docs/project-docs/instructions.md](docs/project-docs/instructions.md) for detailed contribution guidelines.
 
 ## License
 
 This project is for educational purposes as part of Fa25-Project4.
-
-## Authors
-
-- **Baovi Nguyen** - Frontend Lead
-- **Rajan Tavathia** - Backend Team
-- **Jimmy Liu** - Backend Team
-- **Allison Cheng** - Team Member
 
 ## References
 
