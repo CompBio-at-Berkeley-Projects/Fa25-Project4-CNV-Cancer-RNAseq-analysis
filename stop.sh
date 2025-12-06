@@ -25,3 +25,4 @@ echo "Note: Your results data is preserved in Docker volumes."
 echo "To remove all data: docker compose down -v"
 
 
+
